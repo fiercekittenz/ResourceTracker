@@ -13,6 +13,7 @@ If you like what i did feel free to
 ![alt text](image.png)
 
 ## Features
+-poke
 
 - **Discord OAuth Authentication** - Secure login with Discord
 - **Role-Based Access Control** - Permissions managed through Discord server roles
