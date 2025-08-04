@@ -173,8 +173,7 @@ interface CongratulationsState {
   quantityChanged: number
 }
 
-// Import role-checking functions from discord-roles.ts
-import { hasResourceAccess, hasResourceAdminAccess, hasTargetEditAccess } from '@/lib/discord-roles'
+// Note: Role checking now done server-side in auth.ts and passed via session.user.permissions
 
 // Category options for dropdown
 const CATEGORY_OPTIONS = ['Raw', 'Refined', 'Components', 'Other']
@@ -182,10 +181,13 @@ const CATEGORY_OPTIONS = ['Raw', 'Refined', 'Components', 'Other']
 export function ResourceTable({ userId }: ResourceTableProps) {
   const { data: session } = useSession()
   const router = useRouter()
-  const userRoles = session?.user?.roles || []
-  const canEdit = hasResourceAccess(userRoles)
-  const isTargetAdmin = hasTargetEditAccess(userRoles)
-  const isResourceAdmin = hasResourceAdminAccess(userRoles)
+  
+  // Use pre-computed permissions from session (computed server-side)
+  const canEdit = session?.user?.permissions?.hasResourceAccess ?? false
+  const isTargetAdmin = session?.user?.permissions?.hasTargetEditAccess ?? false
+  const isResourceAdmin = session?.user?.permissions?.hasResourceAdminAccess ?? false
+  
+
   
   const [resources, setResources] = useState<Resource[]>([])
   const [editedResources, setEditedResources] = useState<Map<string, ResourceUpdate>>(new Map())

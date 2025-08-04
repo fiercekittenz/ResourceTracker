@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { hasResourceAccess } from '@/lib/discord-roles'
+// Note: hasResourceAccess now computed server-side and available in session.user.permissions
 
 // Utility function to format numbers with commas
 const formatNumber = (num: number): string => {
@@ -66,7 +66,7 @@ export default function ActivityLogPage() {
       return
     }
 
-    if (status === 'authenticated' && (!session || !hasResourceAccess(session.user.roles))) {
+    if (status === 'authenticated' && (!session || !session.user?.permissions?.hasResourceAccess)) {
       router.push('/')
       return
     }
